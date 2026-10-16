@@ -14,6 +14,7 @@ export interface HealthStatus {
       status: string;
       endpoint: string;
       hasApiKeyConfigured: boolean;
+      keyless?: boolean;
     };
   };
 }
@@ -39,9 +40,10 @@ export default async function handler(req: any, res: any) {
         ],
       },
       oneMapGovSg: {
-        status: 'connected',
+        status: 'connected (keyless public endpoint)',
         endpoint: 'https://www.onemap.gov.sg/api/common/elastic/search',
         hasApiKeyConfigured: hasOneMapKey,
+        keyless: true,
       },
     },
   };

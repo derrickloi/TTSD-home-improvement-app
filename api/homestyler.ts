@@ -174,7 +174,8 @@ export async function fetchDataGovSgDataset(datasetId: string): Promise<any[]> {
 
 /**
  * Fetch OneMap Singapore Geocoding & Address search.
- * GUARDRAIL: If ONEMAP_API_KEY is empty, returns 503 "key not configured" and does not call provider.
+ * NOTE: The common elastic search endpoint is keyless (publicly accessible).
+ * If an optional ONEMAP_API_KEY is configured in process.env, it is passed in Authorization header.
  */
 export async function searchOneMap(
   searchVal: string,
@@ -184,17 +185,13 @@ export async function searchOneMap(
 ): Promise<any> {
   const apiKey = process.env.ONEMAP_API_KEY || process.env.ONEMAP_TOKEN;
 
-  if (!apiKey || !apiKey.trim()) {
-    const err: any = new Error('key not configured');
-    err.status = 503;
-    err.provider = 'onemap.gov.sg (ONEMAP_API_KEY)';
-    throw err;
-  }
-
   const headers: Record<string, string> = {
     Accept: 'application/json',
-    Authorization: `Bearer ${apiKey}`,
   };
+
+  if (apiKey && apiKey.trim()) {
+    headers['Authorization'] = `Bearer ${apiKey.trim()}`;
+  }
 
   const url = `https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${encodeURIComponent(
     searchVal

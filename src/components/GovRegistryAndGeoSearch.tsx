@@ -578,9 +578,14 @@ export const GovRegistryAndGeoSearch: React.FC = () => {
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
                 <div>
-                  <h3 className="text-sm font-bold text-stone-900">
-                    SLA OneMap Singapore Address &amp; Geocoding Endpoint
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-bold text-stone-900">
+                      SLA OneMap Singapore Address &amp; Geocoding Endpoint
+                    </h3>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      Keyless Public Endpoint
+                    </span>
+                  </div>
                   <p className="text-xs text-stone-500 mt-0.5">
                     Live endpoint: <code className="font-mono text-[11px] text-amber-800">https://www.onemap.gov.sg/api/common/elastic/search?searchVal=178903&amp;returnGeom=Y&amp;getAddrDetails=Y&amp;pageNum=1</code>
                   </p>
