@@ -49,6 +49,16 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Zone 2: 4-5 Nav Links */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-stone-600">
             <button
+              onClick={() => setActiveTab('bids_leads')}
+              className={`whitespace-nowrap shrink-0 transition-colors py-1 ${
+                activeTab === 'bids_leads'
+                  ? 'text-amber-800 font-semibold border-b-2 border-amber-700'
+                  : 'hover:text-stone-950'
+              }`}
+            >
+              Projects &amp; Bids
+            </button>
+            <button
               onClick={() => setActiveTab('design_aa')}
               className={`whitespace-nowrap shrink-0 transition-colors py-1 ${
                 activeTab === 'design_aa'

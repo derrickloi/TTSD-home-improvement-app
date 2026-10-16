@@ -42,12 +42,17 @@ export const GovRegistryAndGeoSearch: React.FC = () => {
     setError(null);
     try {
       const res = await fetch(`/api/homestyler?action=architects&q=${encodeURIComponent(query)}&limit=15`);
-      if (!res.ok) throw new Error(`API returned ${res.status}`);
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.message || `HTTP ${res.status}: ${res.statusText}`);
+      }
       const data = await res.json();
       setArchitectResults(data.results || []);
       setArchitectTotal(data.total || 0);
     } catch (err: any) {
       setError(err?.message || 'Failed to fetch BOA architects');
+      setArchitectResults([]);
+      setArchitectTotal(0);
     } finally {
       setLoading(false);
     }
@@ -64,12 +69,17 @@ export const GovRegistryAndGeoSearch: React.FC = () => {
           workheadParam
         )}&limit=15`
       );
-      if (!res.ok) throw new Error(`API returned ${res.status}`);
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.message || `HTTP ${res.status}: ${res.statusText}`);
+      }
       const data = await res.json();
       setContractorResults(data.results || []);
       setContractorTotal(data.total || 0);
     } catch (err: any) {
       setError(err?.message || 'Failed to fetch registered contractors');
+      setContractorResults([]);
+      setContractorTotal(0);
     } finally {
       setLoading(false);
     }
@@ -86,12 +96,17 @@ export const GovRegistryAndGeoSearch: React.FC = () => {
           classParam
         )}&limit=15`
       );
-      if (!res.ok) throw new Error(`API returned ${res.status}`);
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.message || `HTTP ${res.status}: ${res.statusText}`);
+      }
       const data = await res.json();
       setBuilderResults(data.results || []);
       setBuilderTotal(data.total || 0);
     } catch (err: any) {
       setError(err?.message || 'Failed to fetch licensed builders');
+      setBuilderResults([]);
+      setBuilderTotal(0);
     } finally {
       setLoading(false);
     }
@@ -105,11 +120,15 @@ export const GovRegistryAndGeoSearch: React.FC = () => {
       const res = await fetch(
         `/api/homestyler?action=onemap&searchVal=${encodeURIComponent(searchVal)}&returnGeom=Y&getAddrDetails=Y&pageNum=1`
       );
-      if (!res.ok) throw new Error(`API returned ${res.status}`);
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.message || `HTTP ${res.status}: ${res.statusText}`);
+      }
       const data = await res.json();
       setOnemapResults(data.data?.results || []);
     } catch (err: any) {
       setError(err?.message || 'Failed to query OneMap SG');
+      setOnemapResults([]);
     } finally {
       setLoading(false);
     }

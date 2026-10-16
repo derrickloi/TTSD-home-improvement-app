@@ -60,10 +60,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Quick Service Intent Tabs */}
             <div className="mt-8 p-1.5 bg-stone-200/70 rounded-xl max-w-xl">
-              <div className="grid grid-cols-4 gap-1">
+              <div className="grid grid-cols-5 gap-1">
                 <button
                   onClick={() => setQuickService('subcon')}
-                  className={`px-2.5 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
+                  className={`px-2 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
                     quickService === 'subcon'
                       ? 'bg-white text-stone-900 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900'
@@ -72,8 +72,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   Direct Sub-con
                 </button>
                 <button
+                  onClick={() => setQuickService('bids' as any)}
+                  className={`px-2 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
+                    (quickService as any) === 'bids'
+                      ? 'bg-white text-stone-900 shadow-xs'
+                      : 'text-stone-600 hover:text-stone-900'
+                  }`}
+                >
+                  Bids &amp; Leads
+                </button>
+                <button
                   onClick={() => setQuickService('gov')}
-                  className={`px-2.5 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
+                  className={`px-2 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
                     quickService === 'gov'
                       ? 'bg-white text-stone-900 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900'
@@ -83,7 +93,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </button>
                 <button
                   onClick={() => setQuickService('id')}
-                  className={`px-2.5 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
+                  className={`px-2 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
                     quickService === 'id'
                       ? 'bg-white text-stone-900 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900'
@@ -93,7 +103,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </button>
                 <button
                   onClick={() => setQuickService('loan')}
-                  className={`px-2.5 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
+                  className={`px-2 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
                     quickService === 'loan'
                       ? 'bg-white text-stone-900 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900'
@@ -106,6 +116,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Dynamic Intent Action Box */}
             <div className="mt-4 p-5 bg-white border border-stone-200 rounded-xl shadow-xs max-w-xl">
+              {(quickService as any) === 'bids' && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-sm font-bold text-stone-900">Project Bidding &amp; Sales Leads Exchange</h2>
+                    <p className="text-xs text-stone-500 mt-0.5">
+                      Free for homeowners · Commission-based for contractors &amp; interior designers.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onNavigateTab('bids_leads')}
+                    className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold rounded-lg transition-colors shadow-xs whitespace-nowrap shrink-0"
+                  >
+                    <span>View Bids &amp; Leads</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
               {quickService === 'subcon' && (
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>

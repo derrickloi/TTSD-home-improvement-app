@@ -2,6 +2,12 @@
  * Homestyler Serverless API
  * Connects to live data.gov.sg and onemap.gov.sg endpoints.
  * 
+ * GUARDRAILS ENFORCED:
+ * - Read every key from process.env inside api/ only.
+ * - Never give a key the VITE_ prefix.
+ * - Never invent data. If the API fails, show a message, not sample rows.
+ * - If a key variable is empty, api/ returns 503 "key not configured" and does not call the provider.
+ * 
  * Live Dataset Links:
  * 1a) Singaporean Register of Architects, BOA (Board of Architects):
  *     https://developers.data.gov.sg/datasets/d_d77de0f78ca589a5c61da7a60fdee6ba/view
@@ -112,22 +118,29 @@ function parseCSVLine(text: string): string[] {
 }
 
 /**
- * Fetch dataset from data.gov.sg v1/v2 polling API without hardcoding keys
+ * Fetch dataset from data.gov.sg v1/v2 polling API.
+ * GUARDRAIL: If DATA_GOV_SG_API_KEY is empty, returns 503 "key not configured" and does not call provider.
  */
 export async function fetchDataGovSgDataset(datasetId: string): Promise<any[]> {
+  const apiKey = process.env.DATA_GOV_SG_API_KEY || process.env.DATA_GOV_API_KEY;
+
+  if (!apiKey || !apiKey.trim()) {
+    const err: any = new Error('key not configured');
+    err.status = 503;
+    err.provider = 'data.gov.sg (DATA_GOV_SG_API_KEY)';
+    throw err;
+  }
+
   const now = Date.now();
   if (cache[datasetId] && now - cache[datasetId].timestamp < CACHE_TTL_MS) {
     return cache[datasetId].data;
   }
 
-  const apiKey = process.env.DATA_GOV_SG_API_KEY || process.env.DATA_GOV_API_KEY;
   const headers: Record<string, string> = {
     Accept: 'application/json',
+    'x-api-key': apiKey,
+    Authorization: `Bearer ${apiKey}`,
   };
-  if (apiKey) {
-    headers['x-api-key'] = apiKey;
-    headers['Authorization'] = `Bearer ${apiKey}`;
-  }
 
   const pollUrl = `https://api-open.data.gov.sg/v1/public/api/datasets/${datasetId}/poll-download`;
   const pollResponse = await fetch(pollUrl, { headers });
@@ -160,7 +173,8 @@ export async function fetchDataGovSgDataset(datasetId: string): Promise<any[]> {
 }
 
 /**
- * Fetch OneMap Singapore Geocoding & Address search
+ * Fetch OneMap Singapore Geocoding & Address search.
+ * GUARDRAIL: If ONEMAP_API_KEY is empty, returns 503 "key not configured" and does not call provider.
  */
 export async function searchOneMap(
   searchVal: string,
@@ -169,12 +183,18 @@ export async function searchOneMap(
   pageNum: number = 1
 ): Promise<any> {
   const apiKey = process.env.ONEMAP_API_KEY || process.env.ONEMAP_TOKEN;
+
+  if (!apiKey || !apiKey.trim()) {
+    const err: any = new Error('key not configured');
+    err.status = 503;
+    err.provider = 'onemap.gov.sg (ONEMAP_API_KEY)';
+    throw err;
+  }
+
   const headers: Record<string, string> = {
     Accept: 'application/json',
+    Authorization: `Bearer ${apiKey}`,
   };
-  if (apiKey) {
-    headers['Authorization'] = `Bearer ${apiKey}`;
-  }
 
   const url = `https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${encodeURIComponent(
     searchVal
@@ -193,19 +213,22 @@ export async function searchOneMap(
  */
 export default async function handler(req: any, res: any) {
   try {
-    // Extract query parameters from URL or req.query
     const url = new URL(req.url || '/', `http://${req.headers?.host || 'localhost'}`);
     const query = req.query || Object.fromEntries(url.searchParams.entries());
 
-    // Path or action determination
     const subpath = req.params?.subpath || '';
     const action = query.action || subpath || 'datasets';
 
+    // Datasets metadata does not require external key
     if (action === 'datasets') {
       const responseData = {
         service: 'Homestyler Public Data & Geolocation Gateway',
         timestamp: new Date().toISOString(),
         datasets: DATASET_REPOSITORIES,
+        guardrails: {
+          keyValidation: '503 key not configured when key variable is empty',
+          noInventedData: 'Strict error reporting on provider failure',
+        },
       };
 
       if (res && typeof res.status === 'function') {
@@ -378,7 +401,6 @@ export default async function handler(req: any, res: any) {
       });
     }
 
-    // Unknown action fallback
     const errPayload = {
       error: `Unknown action "${action}". Supported actions: architects, contractors, builders, onemap, datasets`,
     };
@@ -390,8 +412,24 @@ export default async function handler(req: any, res: any) {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
+    // GUARDRAIL: If key variable is empty, return 503 "key not configured" and do not call provider
+    if (error?.status === 503 || error?.message === 'key not configured') {
+      const status503Payload = {
+        error: 'key not configured',
+        provider: error.provider || 'External Service Provider',
+        message: `${error.provider || 'API'} key variable is empty or not configured in environment variables. Provider was not called.`,
+      };
+      if (res && typeof res.status === 'function') {
+        return res.status(503).json(status503Payload);
+      }
+      return new Response(JSON.stringify(status503Payload), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     const errorPayload = {
-      error: 'Homestyler serverless endpoint error',
+      error: 'Homestyler API error',
       message: error?.message || String(error),
     };
     if (res && typeof res.status === 'function') {

@@ -9,6 +9,7 @@ import { MarketplaceStore } from './components/MarketplaceStore';
 import { MobileAppCompanion } from './components/MobileAppCompanion';
 import { ProjectDashboardModal } from './components/ProjectDashboardModal';
 import { GovRegistryAndGeoSearch } from './components/GovRegistryAndGeoSearch';
+import { ProjectBiddingMarketplace } from './components/ProjectBiddingMarketplace';
 import { Footer } from './components/Footer';
 import {
   INITIAL_ESCROW_MILESTONES,
@@ -342,6 +343,11 @@ export default function App() {
               </div>
             </section>
           </div>
+        )}
+
+        {/* Tab: Project Bidding Exchange & Sales Leads */}
+        {activeTab === 'bids_leads' && (
+          <ProjectBiddingMarketplace />
         )}
 
         {/* Tab 2: Design & A&A Suite */}
