@@ -119,6 +119,16 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Fixtures &amp; Store
             </button>
+            <button
+              onClick={() => setActiveTab('talk_to_us')}
+              className={`whitespace-nowrap shrink-0 transition-colors py-1 ${
+                activeTab === 'talk_to_us'
+                  ? 'text-amber-800 font-semibold border-b-2 border-amber-700'
+                  : 'hover:text-stone-950'
+              }`}
+            >
+              Talk to Us
+            </button>
           </nav>
 
           {/* Zone 3: 1 Primary Action + Utility controls */}

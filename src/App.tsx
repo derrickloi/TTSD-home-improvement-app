@@ -10,6 +10,7 @@ import { MobileAppCompanion } from './components/MobileAppCompanion';
 import { ProjectDashboardModal } from './components/ProjectDashboardModal';
 import { GovRegistryAndGeoSearch } from './components/GovRegistryAndGeoSearch';
 import { ProjectBiddingMarketplace } from './components/ProjectBiddingMarketplace';
+import { TalkToUs } from './components/TalkToUs';
 import { Footer } from './components/Footer';
 import {
   INITIAL_ESCROW_MILESTONES,
@@ -407,6 +408,11 @@ export default function App() {
             isCartOpen={isCartOpen}
             setIsCartOpen={setIsCartOpen}
           />
+        )}
+
+        {/* Tab 7: Talk to Us (Disqus Community Forum & Direct Support) */}
+        {activeTab === 'talk_to_us' && (
+          <TalkToUs />
         )}
       </main>
 

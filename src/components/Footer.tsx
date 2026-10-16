@@ -117,6 +117,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateTab }) => {
                   Architectural Fixtures Store
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => onNavigateTab('talk_to_us')}
+                  className="hover:text-white transition-colors text-amber-400 font-semibold"
+                >
+                  Talk to Us &amp; Forum
+                </button>
+              </li>
             </ul>
           </div>
 
