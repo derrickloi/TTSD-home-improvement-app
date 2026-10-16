@@ -1,0 +1,6 @@
+{
+  "name": "Homestyler",
+  "description": "Homestyler: Your all-in-one One-Stop Shop (OSS) for interior design, renovation, A&A, verified tradesmen matchmaking, finance planner, escrow payment gateways, and data.gov.sg verified registries.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
