@@ -36,6 +36,7 @@ export const TradesmenMatchmaker: React.FC<TradesmenMatchmakerProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedContractor, setSelectedContractor] = useState<Subcontractor | null>(null);
   const [hireSuccessMessage, setHireSuccessMessage] = useState<string | null>(null);
+  const [hotlineNotice, setHotlineNotice] = useState<string | null>(null);
 
   // Wizard state
   const [wizardOpen, setWizardOpen] = useState(showWizardModal);
@@ -432,6 +433,22 @@ export const TradesmenMatchmaker: React.FC<TradesmenMatchmakerProps> = ({
                 </div>
               </div>
 
+              {/* Hotline in-UI Notice */}
+              {hotlineNotice && (
+                <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-2">
+                  <PhoneCall className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <span className="font-semibold">{hotlineNotice}</span>
+                    <button
+                      onClick={() => setHotlineNotice(null)}
+                      className="ml-2 text-stone-500 hover:text-stone-800 underline text-[11px]"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Action Buttons in Modal */}
               <div className="mt-8 pt-5 border-t border-stone-200 flex flex-col sm:flex-row gap-3">
                 <button
@@ -443,7 +460,7 @@ export const TradesmenMatchmaker: React.FC<TradesmenMatchmakerProps> = ({
                 </button>
                 <button
                   onClick={() => {
-                    alert(`Direct WhatsApp hotline for ${selectedContractor.company}: +65 6789 2200 (Quote ref: TTSD-${selectedContractor.id})`);
+                    setHotlineNotice(`Direct WhatsApp hotline for ${selectedContractor.company}: +65 6789 2200 (Quote ref: HOMESTYLER-${selectedContractor.id})`);
                   }}
                   className="px-4 py-3 border border-stone-300 text-stone-700 hover:bg-stone-50 text-xs font-semibold rounded-xl transition-colors"
                 >

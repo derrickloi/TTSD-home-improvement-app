@@ -269,7 +269,7 @@ export default function App() {
                       Protect Your Life Savings with SafePay Escrow &amp; Compare 6 Reno Loans
                     </h2>
                     <p className="text-sm text-stone-600 leading-relaxed">
-                      Never pay 50% upfront. TTSD locks your funds in an MAS-regulated trust account. Payments are only released milestone-by-milestone after you review photo inspection proof. Need financing? Access pre-approved bank loans from 2.68% p.a.
+                      Never pay 50% upfront. Homestyler locks your funds in an MAS-regulated trust account. Payments are only released milestone-by-milestone after you review photo inspection proof. Need financing? Access pre-approved bank loans from 2.68% p.a.
                     </p>
 
                     <div className="space-y-2 pt-2">

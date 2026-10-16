@@ -292,7 +292,7 @@ export const MarketplaceStore: React.FC<MarketplaceStoreProps> = ({
                   <div>
                     <div className="font-bold text-stone-900 flex items-center gap-1.5">
                       <Wrench className="w-4 h-4 text-amber-700" />
-                      <span>Add Certified Installation by TTSD Tradesman</span>
+                      <span>Add Certified Installation by Homestyler Tradesman</span>
                     </div>
                     <div className="text-stone-500 text-[11px] mt-0.5">
                       {selectedProduct.installationFee > 0
@@ -461,7 +461,7 @@ export const MarketplaceStore: React.FC<MarketplaceStoreProps> = ({
                       <span className="font-mono tabular-nums">${cartSubtotal.toLocaleString()} SGD</span>
                     </div>
                     <div className="flex justify-between text-stone-500">
-                      <span>TTSD Escrow Buyer Protection</span>
+                      <span>Homestyler Escrow Buyer Protection</span>
                       <span className="text-emerald-700 font-bold">$0.00 Free</span>
                     </div>
                     <div className="flex justify-between text-sm font-bold text-stone-900 pt-2 border-t border-stone-100">

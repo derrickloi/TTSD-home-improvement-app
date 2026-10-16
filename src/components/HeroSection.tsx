@@ -21,7 +21,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onNavigateTab,
   onOpenMatchmaker,
 }) => {
-  const [quickService, setQuickService] = useState<'subcon' | 'id' | 'loan' | 'gov'>('subcon');
+  const [quickService, setQuickService] = useState<'subcon' | 'bids' | 'id' | 'loan' | 'gov'>('subcon');
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-stone-100/80 via-stone-50 to-white pt-8 pb-16 border-b border-stone-200">
@@ -72,9 +72,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   Direct Sub-con
                 </button>
                 <button
-                  onClick={() => setQuickService('bids' as any)}
+                  onClick={() => setQuickService('bids')}
                   className={`px-2 py-2 text-xs font-semibold rounded-lg transition-all text-center whitespace-nowrap ${
-                    (quickService as any) === 'bids'
+                    quickService === 'bids'
                       ? 'bg-white text-stone-900 shadow-xs'
                       : 'text-stone-600 hover:text-stone-900'
                   }`}
@@ -116,7 +116,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Dynamic Intent Action Box */}
             <div className="mt-4 p-5 bg-white border border-stone-200 rounded-xl shadow-xs max-w-xl">
-              {(quickService as any) === 'bids' && (
+              {quickService === 'bids' && (
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <h2 className="text-sm font-bold text-stone-900">Project Bidding &amp; Sales Leads Exchange</h2>

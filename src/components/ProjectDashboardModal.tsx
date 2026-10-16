@@ -55,7 +55,7 @@ export const ProjectDashboardModal: React.FC<ProjectDashboardModalProps> = ({
               Park Colonial · 4-Room Scandinavian
             </h2>
             <div className="text-xs text-stone-500 mt-0.5">
-              Project Reference: <span className="font-mono font-bold text-stone-700">TTSD-SG-88912</span> · Permit #HDB-RN-88219
+              Project Reference: <span className="font-mono font-bold text-stone-700">HOMESTYLER-SG-88912</span> · Permit #HDB-RN-88219
             </div>
           </div>
 

@@ -44,7 +44,7 @@ export const FinanceAndLoansMarketplace: React.FC<FinanceAndLoansMarketplaceProp
   // Dynamic monthly calculation
   const calculateRepayment = (product: LoanProduct, principal: number, years: number) => {
     if (product.interestRate === 0) {
-      // 0% interest plan (e.g. TTSD in-house)
+      // 0% interest plan (e.g. Homestyler in-house)
       const months = Math.min(years * 12, 12);
       return {
         monthly: principal / months,
@@ -72,7 +72,7 @@ export const FinanceAndLoansMarketplace: React.FC<FinanceAndLoansMarketplaceProp
     const tdsr = (totalMonthlyCommitment / applicantSalary) * 100;
     const maxAllowedBySalary = Math.min(50000, applicantSalary * 6);
 
-    const ref = `TTSD-LOAN-${Math.floor(100000 + Math.random() * 900000)}`;
+    const ref = `HOMESTYLER-LOAN-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const result = {
       status: (tdsr <= 55 ? 'approved' : 'conditional') as 'approved' | 'conditional',

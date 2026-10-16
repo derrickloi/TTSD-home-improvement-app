@@ -585,7 +585,7 @@ export const DesignAndAAPlanner: React.FC<DesignAndAAPlannerProps> = ({
                   Statutory Regulations for Additions &amp; Alterations (A&amp;A)
                 </h3>
                 <p className="text-xs text-amber-800/90 mt-1 leading-relaxed">
-                  In Singapore, all structural wall modifications, mezzanine additions, and wet area plumbing require strict adherence to BCA, HDB, and URA guidelines. TTSD only matches contractors holding validated licenses (BCA CR06, CR03, ME05, PUB LP).
+                  In Singapore, all structural wall modifications, mezzanine additions, and wet area plumbing require strict adherence to BCA, HDB, and URA guidelines. Homestyler only matches contractors holding validated licenses (BCA CR06, CR03, ME05, PUB LP).
                 </p>
               </div>
             </div>
@@ -615,7 +615,7 @@ export const DesignAndAAPlanner: React.FC<DesignAndAAPlannerProps> = ({
                     </div>
                     <div className="text-emerald-700 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>TTSD Verified Flow</span>
+                      <span>Homestyler Verified Flow</span>
                     </div>
                   </div>
                 </div>

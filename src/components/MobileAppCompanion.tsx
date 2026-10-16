@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Subcontractor, EscrowMilestone, MarketplaceItem } from '../types';
-import { SUBCONTRACTORS, MARKETPLACE_PRODUCTS } from '../data/mockData';
+import { SUBCONTRACTORS, MARKETPLACE_PRODUCTS, INITIAL_ESCROW_MILESTONES } from '../data/mockData';
 import {
   Home,
   Users,
@@ -36,9 +36,11 @@ export const MobileAppCompanion: React.FC<MobileAppCompanionProps> = ({
   const [appTab, setAppTab] = useState<'today' | 'match' | 'escrow' | 'finance' | 'store'>('today');
   const [urgentHandymanDispatched, setUrgentHandymanDispatched] = useState(false);
   const [selectedSub, setSelectedSub] = useState<Subcontractor | null>(null);
+  const [bagNotice, setBagNotice] = useState<string | null>(null);
 
-  const activeMilestone =
-    milestones.find((m) => m.status === 'action_required') || milestones[1];
+  const safeMilestones = milestones && milestones.length > 0 ? milestones : INITIAL_ESCROW_MILESTONES;
+  const activeMilestone: EscrowMilestone =
+    safeMilestones.find((m) => m.status === 'action_required') || safeMilestones[0];
 
   const handleDispatchHandyman = () => {
     setUrgentHandymanDispatched(true);
@@ -333,7 +335,7 @@ export const MobileAppCompanion: React.FC<MobileAppCompanionProps> = ({
 
                 <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-xs space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-emerald-950 text-xs">TTSD 0% SplitPay Direct</span>
+                    <span className="font-bold text-emerald-950 text-xs">Homestyler 0% SplitPay Direct</span>
                     <span className="text-xs font-bold font-mono text-emerald-800">0.0% p.a.</span>
                   </div>
                   <p className="text-[11px] text-emerald-800">
@@ -349,6 +351,18 @@ export const MobileAppCompanion: React.FC<MobileAppCompanionProps> = ({
                 <div className="text-xs font-bold text-stone-900 uppercase tracking-wider">
                   Fixtures &amp; Wholesale Materials
                 </div>
+
+                {bagNotice && (
+                  <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 flex items-center justify-between">
+                    <span>{bagNotice}</span>
+                    <button
+                      onClick={() => setBagNotice(null)}
+                      className="text-stone-400 hover:text-stone-700 text-[10px]"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                )}
 
                 {MARKETPLACE_PRODUCTS.slice(0, 4).map((p) => (
                   <div
@@ -370,7 +384,10 @@ export const MobileAppCompanion: React.FC<MobileAppCompanionProps> = ({
                     </div>
 
                     <button
-                      onClick={() => alert(`Added ${p.name} to mobile bag!`)}
+                      onClick={() => {
+                        setBagNotice(`Added ${p.name} to mobile bag!`);
+                        setTimeout(() => setBagNotice(null), 3500);
+                      }}
                       className="p-2 bg-stone-900 text-white rounded-lg hover:bg-stone-800 text-xs"
                     >
                       <Plus className="w-3.5 h-3.5" />

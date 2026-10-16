@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { EscrowMilestone } from '../types';
+import { INITIAL_ESCROW_MILESTONES } from '../data/mockData';
 import confetti from 'canvas-confetti';
 import {
   ShieldCheck,
@@ -24,30 +25,34 @@ interface EscrowPaymentGatewayProps {
 }
 
 export const EscrowPaymentGateway: React.FC<EscrowPaymentGatewayProps> = ({
-  milestones,
+  milestones = [],
   onReleaseMilestone,
   onDepositFunds,
 }) => {
+  const safeMilestones = milestones && milestones.length > 0 ? milestones : INITIAL_ESCROW_MILESTONES;
+  const defaultMilestone =
+    safeMilestones.find((m) => m.status === 'action_required') || safeMilestones[0];
+
   const [selectedMilestone, setSelectedMilestone] = useState<EscrowMilestone>(
-    milestones.find((m) => m.status === 'action_required') || milestones[1]
+    defaultMilestone
   );
   const [paymentGatewayOpen, setPaymentGatewayOpen] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'paynow' | 'card' | 'fast'>('paynow');
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [releaseSuccessNotice, setReleaseSuccessNotice] = useState<string | null>(null);
 
-  const totalProjectSum = milestones.reduce((sum, m) => sum + m.amount, 0);
-  const totalPaidSum = milestones
+  const totalProjectSum = safeMilestones.reduce((sum, m) => sum + m.amount, 0);
+  const totalPaidSum = safeMilestones
     .filter((m) => m.status === 'paid')
     .reduce((sum, m) => sum + m.amount, 0);
-  const inEscrowSum = milestones
+  const inEscrowSum = safeMilestones
     .filter((m) => m.status === 'in_escrow' || m.status === 'action_required')
     .reduce((sum, m) => sum + m.amount, 0);
 
   const handleApproveAndRelease = (m: EscrowMilestone) => {
     onReleaseMilestone(m.id);
     setReleaseSuccessNotice(
-      `Milestone #${m.id} (${m.title}) approved! SGD $${m.amount.toLocaleString()} has been released from TTSD Escrow to the verified contractor.`
+      `Milestone #${m.id} (${m.title}) approved! SGD $${m.amount.toLocaleString()} has been released from Homestyler Escrow to the verified contractor.`
     );
     try {
       confetti({
@@ -64,13 +69,14 @@ export const EscrowPaymentGateway: React.FC<EscrowPaymentGatewayProps> = ({
   };
 
   const handleSimulateDeposit = () => {
+    if (!selectedMilestone) return;
     setIsProcessingPayment(true);
     setTimeout(() => {
       setIsProcessingPayment(false);
       setPaymentGatewayOpen(false);
       onDepositFunds(selectedMilestone.id, selectedMilestone.amount);
       setReleaseSuccessNotice(
-        `Payment of SGD $${selectedMilestone.amount.toLocaleString()} successfully deposited into TTSD Protected Escrow Vault!`
+        `Payment of SGD $${selectedMilestone.amount.toLocaleString()} successfully deposited into Homestyler Protected Escrow Vault!`
       );
       try {
         confetti({
@@ -78,6 +84,9 @@ export const EscrowPaymentGateway: React.FC<EscrowPaymentGatewayProps> = ({
           spread: 50,
         });
       } catch (e) {}
+      setTimeout(() => {
+        setReleaseSuccessNotice(null);
+      }, 4500);
     }, 1500);
   };
 
@@ -105,7 +114,7 @@ export const EscrowPaymentGateway: React.FC<EscrowPaymentGatewayProps> = ({
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold text-amber-800 uppercase tracking-wider mb-2">
               <Lock className="w-4 h-4 text-emerald-600" />
-              <span>TTSD SafePay Protected Escrow Vault</span>
+              <span>Homestyler SafePay Protected Escrow Vault</span>
             </div>
             <h1 className="text-3xl font-bold text-stone-900 font-display tracking-tight">
               Milestone Escrow &amp; Payment Gateway
@@ -371,14 +380,14 @@ export const EscrowPaymentGateway: React.FC<EscrowPaymentGatewayProps> = ({
 
               <div className="flex items-center gap-2 text-xs font-semibold text-amber-800 uppercase tracking-wider mb-2">
                 <Lock className="w-4 h-4 text-emerald-600" />
-                <span>TTSD SafePay Gateway</span>
+                <span>Homestyler SafePay Gateway</span>
               </div>
 
               <h2 className="text-xl font-bold text-stone-900 font-display">
                 Deposit to Protected Escrow
               </h2>
               <p className="text-xs text-stone-600 mt-1">
-                Amount: <span className="font-bold text-stone-900 font-mono">${selectedMilestone.amount.toLocaleString()} SGD</span> for {selectedMilestone.stage}.
+                Amount: <span className="font-bold text-stone-900 font-mono">${selectedMilestone ? selectedMilestone.amount.toLocaleString() : '0'} SGD</span> for {selectedMilestone ? selectedMilestone.stage : 'project milestone'}.
               </p>
 
               {/* Payment Method Selector */}
@@ -427,7 +436,7 @@ export const EscrowPaymentGateway: React.FC<EscrowPaymentGatewayProps> = ({
                       </div>
                     </div>
                     <div className="text-xs font-semibold text-stone-900">Scan with DBS PayLah!, OCBC, or UOB TMRW</div>
-                    <div className="text-[11px] text-stone-500 font-mono">Ref: TTSD-ESCROW-{selectedMilestone.id}</div>
+                    <div className="text-[11px] text-stone-500 font-mono">Ref: HOMESTYLER-ESCROW-{selectedMilestone ? selectedMilestone.id : '1'}</div>
                   </div>
                 )}
 
@@ -473,7 +482,7 @@ export const EscrowPaymentGateway: React.FC<EscrowPaymentGatewayProps> = ({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-stone-500">Account Name:</span>
-                      <span className="font-bold text-stone-900">TTSD Escrow Trust Nominees</span>
+                      <span className="font-bold text-stone-900">Homestyler Escrow Trust Nominees</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-stone-500">Account Number:</span>

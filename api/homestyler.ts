@@ -211,7 +211,10 @@ export async function searchOneMap(
 export default async function handler(req: any, res: any) {
   try {
     const url = new URL(req.url || '/', `http://${req.headers?.host || 'localhost'}`);
-    const query = req.query || Object.fromEntries(url.searchParams.entries());
+    const query = {
+      ...Object.fromEntries(url.searchParams.entries()),
+      ...(req.query || {}),
+    };
 
     const subpath = req.params?.subpath || '';
     const action = query.action || subpath || 'datasets';

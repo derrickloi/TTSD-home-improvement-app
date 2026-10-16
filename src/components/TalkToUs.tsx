@@ -3,18 +3,25 @@ import { DiscussionEmbed, CommentCount } from 'disqus-react';
 import {
   MessageSquare,
   MessagesSquare,
-  Sparkles,
   HelpCircle,
   PhoneCall,
   Mail,
   MapPin,
-  Clock,
-  ShieldCheck,
   Send,
-  Lock,
-  ExternalLink,
   CheckCircle2,
 } from 'lucide-react';
+
+export interface ArticleData {
+  id?: string;
+  identifier?: string;
+  url?: string;
+  title?: string;
+  language?: string;
+}
+
+export interface TalkToUsProps {
+  article?: ArticleData;
+}
 
 interface ArticleTopic {
   id: string;
@@ -90,7 +97,7 @@ const TOPICS: ArticleTopic[] = [
   },
 ];
 
-export const TalkToUs: React.FC = () => {
+export const TalkToUs: React.FC<TalkToUsProps> = ({ article }) => {
   const [selectedTopic, setSelectedTopic] = useState<ArticleTopic>(TOPICS[0]);
   const [useSsoMode, setUseSsoMode] = useState<boolean>(false);
   const [quickContactSent, setQuickContactSent] = useState<boolean>(false);
@@ -102,12 +109,20 @@ export const TalkToUs: React.FC = () => {
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://homestyler.sg';
 
   const currentArticle = useMemo(() => {
+    if (article && (article.url || article.id || article.identifier || article.title)) {
+      const artId = article.id || article.identifier || selectedTopic.id;
+      return {
+        id: artId,
+        title: article.title || selectedTopic.title,
+        url: article.url || `${baseUrl}/talk-to-us/${artId}`,
+      };
+    }
     return {
       id: selectedTopic.id,
       title: selectedTopic.title,
       url: `${baseUrl}/talk-to-us/${selectedTopic.id}`,
     };
-  }, [selectedTopic, baseUrl]);
+  }, [article, selectedTopic, baseUrl]);
 
   const handleSendQuickMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -405,3 +420,5 @@ export const TalkToUs: React.FC = () => {
     </div>
   );
 };
+
+export default TalkToUs;
